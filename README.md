@@ -17,7 +17,7 @@
 
 1. **下载源码**
    ```bash
-   git clone https://github.com/your-username/gemini_md.git
+   git clone https://github.com/x-hansong/gemini_md_downloader.git
    cd gemini_md
    ```
 

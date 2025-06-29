@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini MD Icon Generator</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #1e293b;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .canvas-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        .canvas-item {
+            text-align: center;
+        }
+        canvas {
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .download-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+        .download-btn:hover {
+            background: #1d4ed8;
+        }
+        .info {
+            background: #f1f5f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Gemini Markdown Downloader 图标生成器</h1>
+        
+        <div class="info">
+            <h3>设计说明：</h3>
+            <ul>
+                <li>📄 文档形状背景 - 代表 Markdown 文件</li>
+                <li>🔤 大号 "M" 字母 - Markdown 标识</li>
+                <li>⬇️ 下载箭头 - 下载功能</li>
+                <li>✨ 星星装饰 - 呼应 Gemini 双子星概念</li>
+                <li>🎨 现代扁平化设计风格</li>
+            </ul>
+        </div>
+
+        <div class="canvas-container">
+            <div class="canvas-item">
+                <h3>48x48 图标</h3>
+                <canvas id="icon48" width="48" height="48"></canvas>
+                <br>
+                <button class="download-btn" onclick="downloadIcon('icon48', 'icon48.png')">下载 48x48</button>
+            </div>
+            
+            <div class="canvas-item">
+                <h3>128x128 图标</h3>
+                <canvas id="icon128" width="128" height="128"></canvas>
+                <br>
+                <button class="download-btn" onclick="downloadIcon('icon128', 'icon128.png')">下载 128x128</button>
+            </div>
+        </div>
+
+        <div class="info">
+            <h3>使用说明：</h3>
+            <ol>
+                <li>点击对应的下载按钮保存图标</li>
+                <li>将下载的文件替换项目中的 icon48.png 和 icon128.png</li>
+                <li>重新加载扩展即可看到新图标</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        function drawIcon(canvas, size) {
+            const ctx = canvas.getContext('2d');
+            const scale = size / 48; // 以48为基准缩放
+            
+            // 清空画布
+            ctx.clearRect(0, 0, size, size);
+            
+            // 创建渐变背景
+            const gradient = ctx.createLinearGradient(0, 0, 0, size);
+            gradient.addColorStop(0, '#f8fafc');
+            gradient.addColorStop(1, '#e2e8f0');
+            
+            // 绘制圆角矩形背景
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.roundRect(2 * scale, 2 * scale, (size - 4) * scale, (size - 4) * scale, 8 * scale);
+            ctx.fill();
+            
+            // 绘制文档边框
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 1 * scale;
+            ctx.stroke();
+            
+            // 绘制主要的 "M" 字母
+            ctx.fillStyle = '#2563eb';
+            ctx.font = `bold ${24 * scale}px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('M', size / 2, size / 2 - 2 * scale);
+            
+            // 绘制下载箭头
+            ctx.fillStyle = '#f59e0b';
+            ctx.beginPath();
+            const arrowSize = 8 * scale;
+            const arrowX = size - 12 * scale;
+            const arrowY = size - 12 * scale;
+            
+            // 箭头主体
+            ctx.moveTo(arrowX, arrowY - arrowSize / 2);
+            ctx.lineTo(arrowX, arrowY + arrowSize / 2);
+            ctx.lineTo(arrowX + arrowSize / 2, arrowY);
+            ctx.closePath();
+            ctx.fill();
+            
+            // 箭头线条
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 2 * scale;
+            ctx.beginPath();
+            ctx.moveTo(arrowX - arrowSize / 2, arrowY - arrowSize / 2);
+            ctx.lineTo(arrowX, arrowY);
+            ctx.stroke();
+            
+            // 绘制装饰星星
+            drawStar(ctx, 8 * scale, 8 * scale, 2 * scale, '#fbbf24');
+            drawStar(ctx, size - 8 * scale, 8 * scale, 1.5 * scale, '#fbbf24');
+            drawStar(ctx, 8 * scale, size - 20 * scale, 1.5 * scale, '#fbbf24');
+        }
+        
+        function drawStar(ctx, x, y, size, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            for (let i = 0; i < 5; i++) {
+                const angle = (i * 144 - 90) * Math.PI / 180;
+                const x1 = x + Math.cos(angle) * size;
+                const y1 = y + Math.sin(angle) * size;
+                if (i === 0) {
+                    ctx.moveTo(x1, y1);
+                } else {
+                    ctx.lineTo(x1, y1);
+                }
+                
+                const innerAngle = ((i + 0.5) * 144 - 90) * Math.PI / 180;
+                const x2 = x + Math.cos(innerAngle) * size * 0.4;
+                const y2 = y + Math.sin(innerAngle) * size * 0.4;
+                ctx.lineTo(x2, y2);
+            }
+            ctx.closePath();
+            ctx.fill();
+        }
+        
+        function downloadIcon(canvasId, filename) {
+            const canvas = document.getElementById(canvasId);
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+        
+        // 初始化绘制图标
+        window.onload = function() {
+            drawIcon(document.getElementById('icon48'), 48);
+            drawIcon(document.getElementById('icon128'), 128);
+        };
+    </script>
+</body>
+</html> 

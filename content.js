@@ -47,7 +47,7 @@
 
         const titleElement = document.querySelector('.conversation.selected .conversation-title, .conversation-title.gds-label-l');
         const title = titleElement ? titleElement.innerText.trim() : 'Gemini Conversation';
-        const filename = sanitizeFilename(title) + '.md';
+        const filename = sanitizeFilename('Gemini - ' + title) + '.md';
         console.log(`${LOG_PREFIX} Filename: ${filename}`);
 
         let markdownContent = `# ${title}\n\n`;

@@ -4,10 +4,12 @@
   "version": "1.5",
   "description": "Click the extension icon to download the current Gemini conversation as a Markdown file with full formatting using Turndown library.",
   "permissions": [
-    "tabs"
+    "tabs",
+    "clipboardWrite"
   ],
   "action": {
-    "default_title": "Download Gemini Chat"
+    "default_title": "Gemini Markdown Downloader",
+    "default_popup": "popup.html"
   },
   "background": {
     "service_worker": "background.js"

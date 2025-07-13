@@ -40,15 +40,14 @@
     }
 
     /**
-     * Extracts the conversation and triggers a download.
+     * Extracts the conversation content and returns it as markdown.
      */
-    function downloadConversation() {
-        console.log(`${LOG_PREFIX} Download command received.`);
+    function extractConversationMarkdown() {
+        console.log(`${LOG_PREFIX} Extracting conversation content.`);
 
         const titleElement = document.querySelector('.conversation.selected .conversation-title, .conversation-title.gds-label-l');
         const title = titleElement ? titleElement.innerText.trim() : 'Gemini Conversation';
-        const filename = sanitizeFilename('Gemini - ' + title) + '.md';
-        console.log(`${LOG_PREFIX} Filename: ${filename}`);
+        console.log(`${LOG_PREFIX} Title: ${title}`);
 
         let markdownContent = `# ${title}\n\n`;
         const turns = document.querySelectorAll('user-query, model-response');
@@ -56,7 +55,7 @@
 
         if (turns.length === 0) {
             console.error(`${LOG_PREFIX} No conversation content found.`);
-            return;
+            return null;
         }
 
         turns.forEach(turn => {
@@ -76,7 +75,26 @@
             }
         });
 
-        const blob = new Blob([markdownContent], { type: 'text/markdown;charset=utf-8;' });
+        return { title, content: markdownContent };
+    }
+
+    /**
+     * Extracts the conversation and triggers a download.
+     */
+    function downloadConversation() {
+        console.log(`${LOG_PREFIX} Download command received.`);
+
+        const result = extractConversationMarkdown();
+        if (!result) {
+            console.error(`${LOG_PREFIX} Failed to extract conversation content.`);
+            return;
+        }
+
+        const { title, content } = result;
+        const filename = sanitizeFilename('Gemini - ' + title) + '.md';
+        console.log(`${LOG_PREFIX} Filename: ${filename}`);
+
+        const blob = new Blob([content], { type: 'text/markdown;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -88,10 +106,82 @@
         console.log(`${LOG_PREFIX} Download triggered successfully with Turndown.`);
     }
 
+    /**
+     * Copies the conversation to clipboard.
+     */
+    function copyConversationToClipboard() {
+        console.log(`${LOG_PREFIX} Copy to clipboard command received.`);
+
+        const result = extractConversationMarkdown();
+        if (!result) {
+            console.error(`${LOG_PREFIX} Failed to extract conversation content.`);
+            return false;
+        }
+
+        const { content } = result;
+        
+        try {
+            // Method 1: Try modern Clipboard API first
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(content).then(() => {
+                    console.log(`${LOG_PREFIX} Content copied to clipboard successfully using Clipboard API.`);
+                }).catch((err) => {
+                    console.log(`${LOG_PREFIX} Clipboard API failed, trying fallback method:`, err);
+                    // Fallback to the old method
+                    fallbackCopyToClipboard(content);
+                });
+            } else {
+                // Fallback for older browsers or non-secure contexts
+                fallbackCopyToClipboard(content);
+            }
+            return true;
+        } catch (err) {
+            console.error(`${LOG_PREFIX} Failed to copy to clipboard:`, err);
+            return false;
+        }
+    }
+
+    /**
+     * Fallback method to copy text to clipboard using execCommand
+     */
+    function fallbackCopyToClipboard(text) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        
+        // Make the textarea invisible
+        textArea.style.position = 'fixed';
+        textArea.style.top = '-9999px';
+        textArea.style.left = '-9999px';
+        textArea.style.opacity = '0';
+        
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) {
+                console.log(`${LOG_PREFIX} Content copied to clipboard successfully using fallback method.`);
+            } else {
+                console.error(`${LOG_PREFIX} Fallback copy method failed.`);
+            }
+        } catch (err) {
+            console.error(`${LOG_PREFIX} Fallback copy method error:`, err);
+        } finally {
+            document.body.removeChild(textArea);
+        }
+    }
+
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         if (request.action === "download_markdown") {
             downloadConversation();
             sendResponse({ status: "Download initiated with Turndown." });
+        } else if (request.action === "copy_markdown") {
+            const success = copyConversationToClipboard();
+            sendResponse({ 
+                status: success ? "Content copied to clipboard." : "Failed to copy to clipboard.",
+                success: success
+            });
         }
         return true;
     });

